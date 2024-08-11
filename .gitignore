@@ -1,3 +1,4 @@
 everglen/
 instance/
+__pycache__/
 .flaskenv
