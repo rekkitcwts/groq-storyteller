@@ -412,7 +412,7 @@
 					<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" v-for="series in seriesList" :key="series.id" @click="viewSelectedSeries(series)">
 						<div class="d-flex w-100 align-items-center justify-content-between">
 							<strong class="mb-1">{{ '{{ series.series_name }}' }}</strong>
-							<small class="text-muted">???</small>
+							<small class="text-muted">{{ '{{ series.stories.length }}' }}</small>
 						</div>
 						<div class="col-10 mb-1 small">{{ '{{ series.series_desc }}' }}</div>
 					</a>
@@ -447,23 +447,19 @@
 						<span class="fs-5 fw-semibold">Story Reader</span>
 					</a>
 					<button @click="viewSeriesSubMenuGenerateNewStory(selectedSeries)">New Chapter/Story</button>
-					<button>Previous</button>
-					<button>Next</button>
-					<div class="list-group list-group-flush border-bottom scrollarea">
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et dapibus ipsum. Cras id egestas nisl. Aliquam eget ullamcorper tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sit amet lacinia erat. Aliquam lorem enim, cursus pretium sagittis vel, semper at est. In at justo at erat eleifend auctor id non lectus. Vivamus ut sem eu leo ullamcorper mattis quis sit amet odio.</p>
-
-						<p>Ut maximus lacus nisi, vel malesuada nunc sagittis sed. Nunc pharetra interdum tellus sit amet maximus. Proin semper, dolor nec ultricies molestie, justo justo consequat diam, et pharetra nulla odio non tellus. Praesent efficitur tempor sem a molestie. Proin et aliquam mi, vel vestibulum dolor. Pellentesque sit amet malesuada lectus, nec egestas mauris. Sed eget nisl a velit condimentum aliquam vel eget quam. Nunc luctus viverra sapien et ultrices. Morbi gravida, purus non elementum volutpat, tellus risus congue orci, at aliquam magna ligula quis nulla. Quisque est erat, eleifend id purus vitae, imperdiet congue mauris. Donec efficitur nulla et diam pharetra rutrum. In eu ipsum condimentum, ornare est ac, pulvinar nulla. Duis tempor tempor risus sed malesuada.</p>
-
-						<p>Sed quis auctor neque, a rutrum libero. Praesent aliquet neque id neque gravida vulputate. Proin nibh felis, tristique viverra ipsum efficitur, gravida dictum ipsum. Fusce metus dui, faucibus non erat ac, consectetur tincidunt est. Sed vestibulum orci at pharetra egestas. Integer tempor accumsan aliquam. Suspendisse scelerisque est tortor, in eleifend enim interdum id. Etiam vel ipsum mi. Vestibulum sapien massa, tempus eu tortor sit amet, consectetur venenatis massa. Donec vitae libero erat. Duis vitae ante id tortor accumsan rhoncus. Vivamus sodales dapibus suscipit. Vestibulum interdum a mi ut euismod. Suspendisse faucibus sodales laoreet.</p>
-
-						<p>Donec sed ex scelerisque, consectetur sem vitae, vulputate elit. Maecenas in mi nunc. Ut eros orci, volutpat rutrum condimentum id, varius in enim. Aenean non sagittis massa. Nam vestibulum mattis dolor, quis imperdiet orci. In cursus felis fringilla, vulputate dolor vitae, gravida justo. Integer cursus neque a aliquet pretium. Cras finibus porttitor turpis venenatis pharetra. Nullam sit amet quam maximus, mattis nisl non, blandit ex. Nunc ut suscipit augue. Sed ac mi sed sem vestibulum scelerisque non quis orci. Donec risus quam, dignissim et ornare id, fringilla eget dui. Curabitur lacinia blandit lectus. Integer sed eros massa.</p>
-
-						<p>Etiam maximus eu sapien non scelerisque. In hac habitasse platea dictumst. Mauris ut arcu tellus. Proin eu condimentum sapien. Nullam lorem turpis, facilisis at finibus at, efficitur non neque. Quisque risus libero, mattis ac nunc consectetur, tincidunt interdum risus. Suspendisse tempor orci est, ac hendrerit lorem cursus et. Pellentesque malesuada orci metus, id congue velit aliquet et. Integer ac sapien eget eros volutpat ultrices sit amet ac leo. Nam placerat est mi, et hendrerit tortor egestas sit amet. Nam at orci laoreet, tempus nulla ac, porttitor velit. Sed at turpis tincidunt, feugiat velit vitae, ultrices velit.</p>
-
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus eros et lorem varius tristique. Phasellus a risus elit. Donec a dui vehicula, tempor nunc at, sollicitudin sem. Nullam vehicula ac leo nec ultrices. Vestibulum tristique nulla a rutrum ultricies. Ut mi odio, cursus ut ligula et, ultricies auctor augue. Phasellus elementum felis non ante suscipit efficitur. Morbi quis eros ac augue bibendum cursus. Morbi quis mauris erat.</p>
-
-						<p>Donec consequat rutrum nisl, vel venenatis eros pellentesque vulputate. Vivamus vitae tempus urna, et faucibus odio. Aenean eleifend, lacus a tempus sollicitudin, tortor dolor blandit urna, sed ultrices nulla turpis ut felis. Cras eu vestibulum sem. In nec velit eleifend, maximus est a, bibendum elit. Cras placerat ornare purus vitae elementum. Vestibulum posuere arcu ipsum, sit amet iaculis odio ullamcorper a. Ut blandit venenatis arcu sed ultrices. Suspendisse non cursus lorem. Duis non faucibus odio, sed vulputate metus. In eget leo aliquam nisi feugiat eleifend sit amet vel ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin ornare dui sit amet purus rhoncus porta.</p>
-					</div>
+					<template v-if="selectedSeries.stories.length > 0">
+						<button @click="previousStory" :disabled="currentStoryIndex === 0">Previous</button>
+						<button @click="nextStory" :disabled="currentStoryIndex === selectedSeries.stories.length - 1">Next</button>
+						<div class="list-group list-group-flush border-bottom scrollarea">
+							<h5>{{ '{{selectedSeries.stories[currentStoryIndex].story_title}}' }}</h5>
+							<p v-html="selectedSeries.stories[currentStoryIndex].full_story.replace(/\n\n/g, '<br><br>')"></p>
+						</div>
+					</template>
+					<template v-else>
+						<div class="list-group list-group-flush border-bottom scrollarea">
+							<p>No stories yet. Why not create one? Or go to Amsterdam to get some stroopwaffel?</p>
+						</div>
+					</template>
 				</div>
 			</template>
 			
@@ -595,7 +591,9 @@
 				fullSelectedCharacter: '',
 				selectedRelation: '',
 				seriesList: [],
+				// selectedSeries: '',
 				storiesList: [],
+				currentStoryIndex: 0,
 				subMenuClicked: '',
 				subMenu2Clicked: '',
 				selectedSeries: '',
@@ -619,6 +617,7 @@
 			},
 			clearAllSelected() {
 				this.selectedCharacter = '';
+				this.selectedSeries = '';
 				this.subMenuClicked = '';
 				this.subMenu2Clicked = '';
 			},
@@ -647,6 +646,7 @@
 					context: this,
 					success: function(res) {
 						this.seriesList = res;
+						console.log(res);
 					}
 				});
 			},
@@ -818,6 +818,17 @@
 			viewSelectedSeries(series) {
 				this.subMenuClicked = 'SelectedSeries';
 				this.selectedSeries = series;
+				this.currentStoryIndex = 0; // set the initial story index to 0
+			},
+			previousStory() {
+				if (this.currentStoryIndex > 0) {
+					this.currentStoryIndex--;
+				}
+			},
+			nextStory() {
+				if (this.currentStoryIndex < this.selectedSeries.stories.length - 1) {
+					this.currentStoryIndex++;
+				}
 			},
 			viewSeriesSubMenuGenerateNewStory(series) {
 				this.subMenuClicked = 'NewStorySeries';
@@ -878,7 +889,26 @@
 					'full_story': this.story_AI_output,
 				};
 				
-				console.log(postData);
+				ajaxurl = "{{ url_for('api_story_save') }}";
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.fetchCharacters();
+						this.story_location = '';
+						this.story_characters = [];
+						this.story_summary = "";
+						this.story_title = ""
+						this.story_AI_output = "";
+						this.subMenuClicked = 'SelectedSeries';
+					}
+				});
+				
 			},
 			goToCharacterExtractor() {
 				this.currentMenu = 'ImportMainScreen';

@@ -170,7 +170,23 @@ def api_series_list():
     series = SeriesDB.query.all()
     series_list = []
     for row in series:
-        series_list.append({'id': row.id, 'series_name': row.series_name, 'series_desc': row.series_desc })
+        stories = StoryDB.query.filter_by(series_id=row.id).all()
+        series_list.append({
+            'id': row.id, 
+            'series_name': row.series_name, 
+            'series_desc': row.series_desc,
+            'stories': [
+                {
+                    'id': story.id,
+                    'story_title': story.story_title,
+                    'episode_number': story.episode_number,
+                    'location': story.location,
+                    'plot': story.plot,
+                    'full_story': story.full_story
+                }
+                for story in stories
+            ]
+        })
     return jsonify(series_list)
     
 @app.route('/api/stories/generate', methods=['POST'])
@@ -192,18 +208,7 @@ def api_story_generate():
         char_rel = getCharacterRelationships(character_db_model)
         character_relationships = character_relationships + char_rel
 
-    """        
-    if character_relationships:
-        generated_story = generate_story(scenario=summary, custom_characters=character_AI_models, location=location, relationships=character_relationships)
-    else:
-        generated_story = generate_story(scenario=summary, custom_characters=character_AI_models, location=location)
-    print(generated_story)
-    story_title = json.loads(generated_story)['title']
-    output = expand_plot_to_story(json.loads(generated_story)['plot'])
     
-    return jsonify({"story_title": story_title, "story": output})
-    """
-
     try:
         if character_relationships:
             generated_story = generate_story(scenario=summary, custom_characters=character_AI_models, location=location, relationships=character_relationships)
@@ -218,10 +223,42 @@ def api_story_generate():
         print(str(e))
         return jsonify({"error": str(e)}), 500
 
-@app.route('/api/stories/generate', methods=['POST'])
+@app.route('/api/stories/save', methods=['POST'])
 def api_story_save():
     something = byteNonsense(request.data)
     print(something)
+    series = SeriesDB.query.filter_by(id=something['series']['id']).first()
+    characters = something['characters']
+    story_title = something['story_title']
+    plot = something['plot']
+    location = something['location']
+    full_story = something['full_story']
+    num_episodes = StoryDB.query.filter_by(series_id=something['series']['id']).count()
+    new_episode_number = num_episodes + 1
+    
+    newStory = StoryDB(
+        story_title = story_title,
+        episode_number = new_episode_number,
+        location = location,
+        plot = plot,
+        full_story = full_story,
+        series_id = something['series']['id']
+    )
+    db.session.add(newStory)
+    db.session.commit()
+    print(newStory.id)
+    new_story_id = newStory.id
+    
+    for key in characters:
+        character = characters[key]
+        story_character = StoryCharactersDB(
+            story_id = new_story_id,
+            char_id = character['id']
+        )
+        db.session.add(story_character)
+        db.session.commit()
+    
+    return jsonify({'story_id': new_story_id, 'message': 'STORY_ADDED', 'status': 'OK'})
     
     
 '''
