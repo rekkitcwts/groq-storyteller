@@ -1,0 +1,923 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<main id="app">
+		<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+			<symbol id="bootstrap" viewBox="0 0 118 94">
+				<title>Bootstrap</title>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
+			</symbol>
+			<symbol id="home" viewBox="0 0 16 16">
+				<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+  </symbol>
+  <symbol id="speedometer2" viewBox="0 0 16 16">
+    <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
+    <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z"/>
+  </symbol>
+  <symbol id="table" viewBox="0 0 16 16">
+    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
+  </symbol>
+  <symbol id="people-circle" viewBox="0 0 16 16">
+    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+  </symbol>
+  <symbol id="grid" viewBox="0 0 16 16">
+    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+  </symbol>
+  <symbol id="collection" viewBox="0 0 16 16">
+    <path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z"/>
+  </symbol>
+  <symbol id="calendar3" viewBox="0 0 16 16">
+    <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"/>
+    <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+  </symbol>
+  <symbol id="chat-quote-fill" viewBox="0 0 16 16">
+    <path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272 1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01 1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01 1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4 1.686 1.686 0 0 0-.227-.273 1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667 0 .92.777 1.666 1.734 1.666.343 0 .662-.095.931-.26z"/>
+  </symbol>
+  <symbol id="cpu-fill" viewBox="0 0 16 16">
+    <path d="M6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+    <path d="M5.5.5a.5.5 0 0 0-1 0V2A2.5 2.5 0 0 0 2 4.5H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2A2.5 2.5 0 0 0 4.5 14v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14a2.5 2.5 0 0 0 2.5-2.5h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14A2.5 2.5 0 0 0 11.5 2V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5zm1 4.5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3A1.5 1.5 0 0 1 6.5 5z"/>
+  </symbol>
+  <symbol id="gear-fill" viewBox="0 0 16 16">
+    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+  </symbol>
+  <symbol id="speedometer" viewBox="0 0 16 16">
+    <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
+    <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
+  </symbol>
+  <symbol id="toggles2" viewBox="0 0 16 16">
+    <path d="M9.465 10H12a2 2 0 1 1 0 4H9.465c.34-.588.535-1.271.535-2 0-.729-.195-1.412-.535-2z"/>
+    <path d="M6 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm.535-10a3.975 3.975 0 0 1-.409-1H4a1 1 0 0 1 0-2h2.126c.091-.355.23-.69.41-1H4a2 2 0 1 0 0 4h2.535z"/>
+    <path d="M14 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/>
+  </symbol>
+  <symbol id="tools" viewBox="0 0 16 16">
+    <path d="M1 0L0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.356 3.356a1 1 0 0 0 1.414 0l1.586-1.586a1 1 0 0 0 0-1.414l-3.356-3.356a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-.269-.035-.53-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814L1 0zm9.646 10.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708zM3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026L3 11z"/>
+  </symbol>
+  <symbol id="chevron-right" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+  </symbol>
+  <symbol id="geo-fill" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
+  </symbol>
+		</svg>
+		
+		<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+			<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+				<svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+				<span class="fs-4">Everglen Engine</span>
+			</a>
+			<hr>
+			<ul class="nav nav-pills flex-column mb-auto">
+				<li class="nav-item">
+					<a href="#" class="nav-link" aria-current="page" @click="goToHomeMain()">
+						<svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+						Home
+					</a>
+				</li>
+				<li>
+					<a href="#" class="nav-link text-white" @click="goToCharactersList()">
+						<svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+						Characters
+					</a>
+				</li>
+				<li>
+					<a href="#" class="nav-link text-white" @click="goToSeriesList()">
+						<svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+						Series
+					</a>
+				</li>
+				<li>
+					<a href="#" class="nav-link text-white" @click="goToCharacterExtractor()">
+						<svg class="bi me-2" width="16" height="16"><use xlink:href="#tools"></use></svg>
+						Import
+					</a>
+				</li>
+				<li>
+					<a href="#" class="nav-link text-white">
+						<svg class="bi me-2" width="16" height="16"><use xlink:href="#tools"></use></svg>
+						Other Tools
+					</a>
+				</li>
+			</ul>
+    <hr>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>mdo</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        <li><a class="dropdown-item" href="#">New project...</a></li>
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Sign out</a></li>
+      </ul>
+    </div>
+  </div>
+	
+	<div class="b-example-divider"></div>
+	<template v-if="currentMenu == 'ListDummy'">
+	
+	<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+    <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+      <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+      <span class="fs-5 fw-semibold">List group</span>
+    </a>
+    <div class="list-group list-group-flush border-bottom scrollarea">
+      <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small>Wed</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Tues</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Mon</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Wed</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Tues</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Mon</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Wed</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Tues</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Mon</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Wed</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Tues</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">List group item heading</strong>
+          <small class="text-muted">Mon</small>
+        </div>
+        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
+      </a>
+    </div>
+
+  </div>
+  
+  <div class="b-example-divider"></div>
+	
+	</template>
+		<template v-if="currentMenu == 'HomeMainScreen'">
+			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+				<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+					<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+					<span class="fs-5 fw-semibold">Panel Title</span>
+				</a>
+				<p>Hello Everglen!</p>
+			</div>
+		</template>
+		
+		<template v-if="currentMenu == 'CharactersMainScreen'">
+			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+				<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+					<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+					<span class="fs-5 fw-semibold">Characters</span>
+				</a>
+				<button @click="goToNewCharacterSubMenu()">New Character</button>
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true" v-for="character in charactersList" :key="character.id" @click="viewSelectedCharacter(character)">
+						<div class="d-flex w-100 align-items-center justify-content-between">
+							<strong class="mb-1">{{ '{{ character.character_name }}' }}</strong>
+							<small>{{ '{{ character.character_age }}' }} / {{ '{{ character.character_gender }}' }}</small>
+						</div>
+						<div class="col-10 mb-1 small">{{ '{{ character.high_school_clique }}' }}</div>
+						<div class="col-10 mb-1 small">{{ '{{ character.additional_desc }}' }}</div>
+					</a>
+				</div>
+
+			</div>
+  
+			<div class="b-example-divider"></div>
+		
+			
+		</template>
+		
+		<template v-if="subMenuClicked == 'ViewCharacterEntry'">
+			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
+				<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+					<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+					<span class="fs-5 fw-semibold">Character Info</span>
+				</a>
+				
+				<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#basic-info" aria-expanded="false" aria-controls="basic-info">
+					Basic Info
+				</button>
+				
+				<div class="collapse" id="basic-info">
+					<div class="card card-body">
+						<table class="table">
+							<tr>
+								<th>Name</th>
+								<td>{{ '{{ fullSelectedCharacter.character.character_name }}' }}</td>
+							</tr>
+							<tr>
+								<th>Age</th>
+								<td>{{ '{{ fullSelectedCharacter.character.character_age }}' }}</td>
+							</tr>
+							<tr>
+								<th>Gender</th>
+								<td>{{ '{{ fullSelectedCharacter.character.character_gender }}' }}</td>
+							</tr>
+							<tr>
+								<th>Personality</th>
+								<td>{{ '{{ fullSelectedCharacter.character.character_personality }}' }}</td>
+							</tr>
+							<tr>
+								<th v-if="fullSelectedCharacter.character.current_job == 'High School Student'">Clique</th>
+								<th v-else>Current Job</th>
+								<td v-if="fullSelectedCharacter.character.current_job == 'High School Student'">{{ '{{ fullSelectedCharacter.character.high_school_clique }}' }}</td>
+								<td v-else>{{ '{{ fullSelectedCharacter.character.current_job }}' }}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				
+				
+				<p>{{ '{{ fullSelectedCharacter.character.additional_desc }}' }}</p>
+				<button @click="addCharacterConnection()">Add Connection</button>
+				<button>Edit Profile</button>
+				
+					<p>Connections (Relationships with other characters)</p>
+					<div class="list-group list-group-flush border-bottom scrollarea">
+						<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" v-for="relation in fullSelectedCharacter.relationships" :key="relation.relation_id" @click="editCharacterConnection(relation)">
+							<div class="d-flex w-100 align-items-center justify-content-between">
+								<strong v-if="relation.relation_subject == fullSelectedCharacter.character.id" class="mb-1">{{ '{{ viewCharacterNameFromCharactersList(relation.relation_object) }}' }}</strong>
+								<strong v-if="relation.relation_object == fullSelectedCharacter.character.id" class="mb-1">{{ '{{ viewCharacterNameFromCharactersList(relation.relation_subject) }}' }}</strong>
+								<small>{{ '{{ relation.relation_id }}' }}</small>
+							</div>
+							<div class="col-10 mb-1 small">{{ '{{ relation.relation }}' }}</div>
+						</a>
+					</div>
+					
+				
+			</div>
+			
+			<div class="b-example-divider"></div>
+			
+			<template v-if="subMenu2Clicked == 'AddCharacterConnection'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Add Character Connection</span>
+					</a>
+					
+					<form @submit.prevent="saveNewConnection">
+						<label for="relation_object">Select another character</label>
+						<select class="form-select" v-model="relation_object">
+							<option v-for="character in charactersList" :key="character.id" :value="character">{{ '{{ character.character_name }}' }}</option>
+						</select>
+						<label for="relation">Relation (e.g. boyfriends, cousins, friends, etc)</label>
+						<input class="form-control" name="relation" v-model="relation">
+						<button>Add relation</button>
+					</form>
+				</div>
+				
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					
+				</div>
+			</template>
+			
+			<template v-if="subMenu2Clicked == 'EditCharacterConnection'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Edit Character Connection</span>
+					</a>
+					
+					<template v-if="selectedRelation.relation_object == fullSelectedCharacter.character.id">
+						<p>This character is the second character in the relationship. Please edit the relationship from the other character.</p>
+					</template>
+					<template v-else>
+						<form @submit.prevent="saveEditedConnection(selectedRelation)">
+							<label for="relation_object">Select another character</label>
+							<select class="form-select" v-model="relation_object">
+								<option v-for="character in charactersList" :key="character.id" :value="character">{{ '{{ character.character_name }}' }}</option>
+							</select>
+							<label for="relation">Relation (e.g. boyfriends, cousins, friends, etc)</label>
+							<input class="form-control" name="relation" v-model="relation">
+							<button>Save Changes</button>
+						</form>
+					</template>
+				</div>
+				
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					
+				</div>
+			</template>
+			
+		</template>
+		
+		<template v-if="subMenuClicked == 'NewCharacterEntry'">
+				
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+						<span class="fs-5 fw-semibold">New Character</span>
+					</a>
+					<form @submit.prevent="addNewCharacter">
+						<label for="new_character_name">Name</label>
+						<input class="form-control" name="new_character_name" v-model="new_character_name">
+						<label for="new_character_age">Age</label>
+						<input class="form-control" name="new_character_age" v-model="new_character_age">
+						<label for="new_character_gender">Gender</label>
+						<input class="form-control" name="new_character_gender" v-model="new_character_gender">
+						<label for="new_character_personality">Personality</label>
+						<input class="form-control" name="new_character_personality" v-model="new_character_personality">
+						<br>
+						<label for="new_character_clique">Clique</label>
+						<input class="form-control" name="new_character_clique" v-model="new_character_clique">
+						<label for="new_character_cultural_background">Cultural Background</label>
+						<input class="form-control" name="new_character_cultural_background" v-model="new_character_cultural_background">
+						<label for="new_character_job">Current Job</label>
+						<input class="form-control" name="new_character_job" v-model="new_character_job">
+						<label for="new_character_additional_desc">Additional Description</label>
+						<input class="form-control" name="new_character_additional_desc" v-model="new_character_additional_desc">
+						<button>Add New Character</button> 
+					</form>
+				</div>
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					
+				</div>
+				
+				<div class="b-example-divider"></div>
+			</template>
+		
+		<template v-if="currentMenu == 'SeriesMainScreen'">
+			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+				<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+					<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+					<span class="fs-5 fw-semibold">Everglen Series</span>
+				</a>
+				<button @click="goToNewSeriesSubMenu()">New Series</button>
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" v-for="series in seriesList" :key="series.id" @click="viewSelectedSeries(series)">
+						<div class="d-flex w-100 align-items-center justify-content-between">
+							<strong class="mb-1">{{ '{{ series.series_name }}' }}</strong>
+							<small class="text-muted">???</small>
+						</div>
+						<div class="col-10 mb-1 small">{{ '{{ series.series_desc }}' }}</div>
+					</a>
+				</div>
+			</div>
+			
+			<div class="b-example-divider"></div>
+			<template v-if="subMenuClicked == 'NewSeriesEntry'">
+				
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+						<span class="fs-5 fw-semibold">New Series</span>
+					</a>
+					<form @submit.prevent="addNewSeries">
+						<label for="newSeriesTitle">Series Title</label>
+						<input class="form-control" name="newSeriesTitle" v-model="newSeriesTitle">
+						<label for="newSeriesDesc">Description</label>
+						<input class="form-control" name="newSeriesDesc" v-model="newSeriesDesc">
+						<br>
+						<button>Add New Series</button> 
+					</form>
+				</div>
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					
+				</div>
+			</template>
+			<template v-if="subMenuClicked == 'SelectedSeries'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 580px;">
+					<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Story Reader</span>
+					</a>
+					<button @click="viewSeriesSubMenuGenerateNewStory(selectedSeries)">New Chapter/Story</button>
+					<button>Previous</button>
+					<button>Next</button>
+					<div class="list-group list-group-flush border-bottom scrollarea">
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et dapibus ipsum. Cras id egestas nisl. Aliquam eget ullamcorper tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sit amet lacinia erat. Aliquam lorem enim, cursus pretium sagittis vel, semper at est. In at justo at erat eleifend auctor id non lectus. Vivamus ut sem eu leo ullamcorper mattis quis sit amet odio.</p>
+
+						<p>Ut maximus lacus nisi, vel malesuada nunc sagittis sed. Nunc pharetra interdum tellus sit amet maximus. Proin semper, dolor nec ultricies molestie, justo justo consequat diam, et pharetra nulla odio non tellus. Praesent efficitur tempor sem a molestie. Proin et aliquam mi, vel vestibulum dolor. Pellentesque sit amet malesuada lectus, nec egestas mauris. Sed eget nisl a velit condimentum aliquam vel eget quam. Nunc luctus viverra sapien et ultrices. Morbi gravida, purus non elementum volutpat, tellus risus congue orci, at aliquam magna ligula quis nulla. Quisque est erat, eleifend id purus vitae, imperdiet congue mauris. Donec efficitur nulla et diam pharetra rutrum. In eu ipsum condimentum, ornare est ac, pulvinar nulla. Duis tempor tempor risus sed malesuada.</p>
+
+						<p>Sed quis auctor neque, a rutrum libero. Praesent aliquet neque id neque gravida vulputate. Proin nibh felis, tristique viverra ipsum efficitur, gravida dictum ipsum. Fusce metus dui, faucibus non erat ac, consectetur tincidunt est. Sed vestibulum orci at pharetra egestas. Integer tempor accumsan aliquam. Suspendisse scelerisque est tortor, in eleifend enim interdum id. Etiam vel ipsum mi. Vestibulum sapien massa, tempus eu tortor sit amet, consectetur venenatis massa. Donec vitae libero erat. Duis vitae ante id tortor accumsan rhoncus. Vivamus sodales dapibus suscipit. Vestibulum interdum a mi ut euismod. Suspendisse faucibus sodales laoreet.</p>
+
+						<p>Donec sed ex scelerisque, consectetur sem vitae, vulputate elit. Maecenas in mi nunc. Ut eros orci, volutpat rutrum condimentum id, varius in enim. Aenean non sagittis massa. Nam vestibulum mattis dolor, quis imperdiet orci. In cursus felis fringilla, vulputate dolor vitae, gravida justo. Integer cursus neque a aliquet pretium. Cras finibus porttitor turpis venenatis pharetra. Nullam sit amet quam maximus, mattis nisl non, blandit ex. Nunc ut suscipit augue. Sed ac mi sed sem vestibulum scelerisque non quis orci. Donec risus quam, dignissim et ornare id, fringilla eget dui. Curabitur lacinia blandit lectus. Integer sed eros massa.</p>
+
+						<p>Etiam maximus eu sapien non scelerisque. In hac habitasse platea dictumst. Mauris ut arcu tellus. Proin eu condimentum sapien. Nullam lorem turpis, facilisis at finibus at, efficitur non neque. Quisque risus libero, mattis ac nunc consectetur, tincidunt interdum risus. Suspendisse tempor orci est, ac hendrerit lorem cursus et. Pellentesque malesuada orci metus, id congue velit aliquet et. Integer ac sapien eget eros volutpat ultrices sit amet ac leo. Nam placerat est mi, et hendrerit tortor egestas sit amet. Nam at orci laoreet, tempus nulla ac, porttitor velit. Sed at turpis tincidunt, feugiat velit vitae, ultrices velit.</p>
+
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus eros et lorem varius tristique. Phasellus a risus elit. Donec a dui vehicula, tempor nunc at, sollicitudin sem. Nullam vehicula ac leo nec ultrices. Vestibulum tristique nulla a rutrum ultricies. Ut mi odio, cursus ut ligula et, ultricies auctor augue. Phasellus elementum felis non ante suscipit efficitur. Morbi quis eros ac augue bibendum cursus. Morbi quis mauris erat.</p>
+
+						<p>Donec consequat rutrum nisl, vel venenatis eros pellentesque vulputate. Vivamus vitae tempus urna, et faucibus odio. Aenean eleifend, lacus a tempus sollicitudin, tortor dolor blandit urna, sed ultrices nulla turpis ut felis. Cras eu vestibulum sem. In nec velit eleifend, maximus est a, bibendum elit. Cras placerat ornare purus vitae elementum. Vestibulum posuere arcu ipsum, sit amet iaculis odio ullamcorper a. Ut blandit venenatis arcu sed ultrices. Suspendisse non cursus lorem. Duis non faucibus odio, sed vulputate metus. In eget leo aliquam nisi feugiat eleifend sit amet vel ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin ornare dui sit amet purus rhoncus porta.</p>
+					</div>
+				</div>
+			</template>
+			
+			<template v-if="subMenuClicked == 'NewStorySeries'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 580px;">
+					<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Generate New Story</span>
+					</a>
+					<div class="list-group list-group-flush border-bottom scrollarea">
+					<button @click="viewSelectedSeries(selectedSeries)">Cancel</button>
+					
+					<form @submit.prevent="generateNewStory">
+						<label for="story_characters">Characters</label>
+						<select class="form-select" v-model="story_characters" multiple>
+							<option v-for="character in charactersList" :key="character.id" :value="character">{{ '{{ character.character_name }}' }}</option>
+						</select>
+						<label for="story_location">Story Location</label>
+						<input class="form-control" v-model="story_location">
+						
+						<label for="story_summary">Story Summary</label>
+
+						<textarea class="form-control" id="story_summary" name="story_summary" v-model="story_summary" rows="5" cols="33">
+						</textarea>
+						
+						<button>Generate with AI</button>
+					</form>
+					
+					<h4>AI Output</h4>
+					
+					<div v-if="loading" class="loading-spinner">
+						<i class="fas fa-spinner fa-spin"></i> Generating AI output, please wait.
+					</div>
+					
+					<form @submit.prevent="saveStory">
+						<label for="story_title">Story Title</label>
+						<input class="form-control" name="story_title" v-model="story_title">
+						<label for="story_AI_output">Generated Story (manually edit if needed)</label>
+						<textarea ref="storyAIOutput" class="form-control" name="story_AI_output" v-model="story_AI_output" rows="5" cols="33">
+						</textarea>
+						 
+						<button>Save as Next Chapter/Story</button>
+					</form>
+					</div>
+				</div>
+			</template>
+			
+		</template>
+		
+		<template v-if="currentMenu == 'ImportMainScreen'">
+			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+				<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+					<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+					<span class="fs-5 fw-semibold">Import Characters or Stories</span>
+				</a>
+				<form @submit.prevent="scanStory">
+						
+					<textarea class="form-control" name="imported_story" v-model="imported_story" rows="5" cols="33">
+					</textarea>
+						 
+					<button>Scan for Characters</button>
+				</form>
+				<button>Import Story to Series</button>
+				<div class="list-group list-group-flush border-bottom scrollarea">
+					<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" v-for="(extractedCharacter, key) in extractedCharacters" :key="key" @click="viewScannedCharacter(extractedCharacter)">
+						<div class="d-flex w-100 align-items-center justify-content-between">
+							<strong class="mb-1">{{ '{{ extractedCharacter.name }}' }}</strong>
+							<small class="text-muted">{{ '{{ extractedCharacter.age }}' }}/{{ '{{ extractedCharacter.gender }}' }}</small>
+						</div>
+						<div class="col-10 mb-1 small">{{ '{{ extractedCharacter.personality }}' }}</div>
+					</a>
+				</div>
+
+			</div>
+			
+			<div class="b-example-divider"></div>
+			
+			<template v-if="subMenuClicked == 'ViewScannedCharacter'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
+					<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Viewing Scanned Character</span>
+					</a>
+					
+					<div class="list-group list-group-flush border-bottom scrollarea">
+						<form @submit.prevent="addNewCharacterScanned()">
+						<label for="scanned_character_name">Name</label>
+						<input class="form-control" name="scanned_character_name" v-model="scanned_character_name">
+						<label for="scanned_character_age">Age</label>
+						<input class="form-control" name="scanned_character_age" v-model="scanned_character_age">
+						<label for="scanned_character_gender">Gender</label>
+						<input class="form-control" name="scanned_character_gender" v-model="scanned_character_gender">
+						<label for="scanned_character_personality">Personality</label>
+						<input class="form-control" name="scanned_character_personality" v-model="scanned_character_personality">
+						<br>
+						<label for="scanned_character_clique">Clique</label>
+						<input class="form-control" name="scanned_character_clique" v-model="scanned_character_clique">
+						<label for="scanned_character_cultural_background">Cultural Background</label>
+						<input class="form-control" name="scanned_character_cultural_background" v-model="scanned_character_cultural_background">
+						<label for="scanned_character_job">Current Job</label>
+						<input class="form-control" name="scanned_character_job" v-model="scanned_character_job">
+						<label for="scanned_character_additional_desc">Additional Description</label>
+						<input class="form-control" name="scanned_character_additional_desc" v-model="scanned_character_additional_desc">
+						<button>Add New Character</button> 
+						</form>
+					
+						<p>Info here for an existing character</p>
+						<button>Check Character Database</button>
+					</div>
+				</div>
+				
+				
+			</template>
+		</template>
+	</main>
+{% endblock %}
+
+{% block vuescripts %}
+<script>
+	const { createApp } = Vue;
+
+	createApp({
+		data() {
+			return {
+				loading: false,
+				currentMenu: 'HomeMainScreen',
+				charactersList: [],
+				selectedCharacter: '',
+				fullSelectedCharacter: '',
+				selectedRelation: '',
+				seriesList: [],
+				storiesList: [],
+				subMenuClicked: '',
+				subMenu2Clicked: '',
+				selectedSeries: '',
+				newSeriesTitle: '',
+				newSeriesDesc: '',
+				story_AI_output: "",
+				imported_story: "",
+				extractedCharacters: [],
+				scannedCharacter: '',
+				comparedCharacter: '',
+			};
+		},
+		created() {
+			
+		},
+		methods: {
+			clearAllLists() {
+				this.charactersList = [];
+				this.seriesList = [];
+				this.storiesList = [];
+			},
+			clearAllSelected() {
+				this.selectedCharacter = '';
+				this.subMenuClicked = '';
+				this.subMenu2Clicked = '';
+			},
+			fetchCharacters() {
+				ajaxurl_fetchCharacters = "{{ url_for('api_characters_list') }}"
+			
+				$.ajax({
+					url: ajaxurl_fetchCharacters, 
+					method:"get", 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.charactersList = res;
+					}
+				});
+			},
+			fetchSeries() {
+				ajaxurl_fetchCharacters = "{{ url_for('api_series_list') }}"
+			
+				$.ajax({
+					url: ajaxurl_fetchCharacters, 
+					method:"get", 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.seriesList = res;
+					}
+				});
+			},
+			goToHomeMain() {
+				this.currentMenu = 'HomeMainScreen';
+				this.selectedCharacter = '';
+				this.subMenuClicked = '';
+				this.subMenu2Clicked = '';
+			},
+			goToCharactersList() {
+				this.currentMenu = 'CharactersMainScreen';
+				this.fetchCharacters();
+			},
+			goToNewCharacterSubMenu() {
+				this.subMenuClicked = 'NewCharacterEntry';
+			},
+			addNewCharacter() {
+			},
+			addNewCharacterScanned() {
+				ajaxurl = "{{ url_for('api_characters_add') }}";
+				postData = {
+					"character_made": "scanned",
+					"name": this.scanned_character_name,
+					"age": this.scanned_character_age,
+					"gender": this.scanned_character_gender,
+					"personality": this.scanned_character_personality,
+					"high_school_clique": this.scanned_character_clique,
+					"current_job": this.scanned_character_job,
+					"additional_desc": this.scanned_character_additional_desc,
+					"cultural_background": this.scanned_character_cultural_background
+				};
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.subMenuClicked = '';
+					}
+				});
+			},
+			goToSeriesList() {
+				this.currentMenu = 'SeriesMainScreen';
+				this.fetchSeries();
+			},
+			goToNewSeriesSubMenu() {
+				this.subMenuClicked = 'NewSeriesEntry';
+			},
+			addNewSeries() {
+				ajaxurl = "{{ url_for('api_series_add') }}";
+				postData = { "series_name": this.newSeriesTitle, "series_desc": this.newSeriesDesc };
+		    
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						console.log(res)
+					}
+				});
+			},
+			viewSelectedCharacter(character) {
+				this.subMenuClicked = 'ViewCharacterEntry';
+				this.subMenu2Clicked = '';
+				this.selectedCharacter = character;
+				
+				ajaxurl_fetchCharacterData = "{{ url_for('api_character_url_trick') }}/view/" + this.selectedCharacter.id;
+			
+				$.ajax({
+					url: ajaxurl_fetchCharacterData, 
+					method:"get", 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.fullSelectedCharacter = res;
+					}
+				});
+			},
+			viewCharacterNameFromCharactersList(character_id) {
+				character_name = "";
+				for (i = 0; i < this.charactersList.length; i++) {
+					console.log(this.charactersList[i].character_name);
+					if (this.charactersList[i].id == character_id) {
+						character_name = this.charactersList[i].character_name;
+					}	
+				}
+				return character_name;
+			},
+			getCharacterFromCharactersList(character_id) {
+				for (i = 0; i < this.charactersList.length; i++) {
+					console.log(this.charactersList[i].character_name);
+					if (this.charactersList[i].id == character_id) {
+						return this.charactersList[i];
+					}	
+				}
+				return {};
+			},
+			addCharacterConnection() {
+				this.subMenu2Clicked = 'AddCharacterConnection';
+				
+				this.relation_object = '';
+				this.relation = '';
+			},
+			saveNewConnection() {
+				relation_subject = this.fullSelectedCharacter.character.id;
+				relation_object = this.relation_object.id;
+				relation = this.relation;
+				
+				postData = {
+					"relation_subject": relation_subject,
+					"relation_object": relation_object,
+					"relation": relation
+				};
+				
+				ajaxurl = "{{ url_for('api_relationships_add') }}";
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.subMenu2Clicked = '';
+					}
+				});
+			},
+			editCharacterConnection(connection) {
+				this.subMenu2Clicked = 'EditCharacterConnection';
+				this.selectedRelation = connection;
+				
+				this.relation_object = this.getCharacterFromCharactersList(connection.relation_object);
+				this.relation = connection.relation;
+			},
+			saveEditedConnection(connection) {
+				relation_subject = this.fullSelectedCharacter.character.id;
+				relation_object = this.relation_object.id;
+				relation = this.relation;
+			
+				postData = {
+					"relation_id": connection.relation_id,
+					"relation_subject": relation_subject,
+					"relation_object": relation_object,
+					"relation": relation
+				};
+				
+				ajaxurl = "{{ url_for('api_relationships_edit') }}";
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.subMenu2Clicked = '';
+					}
+				});
+			},
+			viewSelectedSeries(series) {
+				this.subMenuClicked = 'SelectedSeries';
+				this.selectedSeries = series;
+			},
+			viewSeriesSubMenuGenerateNewStory(series) {
+				this.subMenuClicked = 'NewStorySeries';
+				this.selectedSeries = series;
+				this.fetchCharacters();
+				this.story_location = '';
+				this.story_characters = [];
+				this.story_summary = "";
+				this.story_title = ""
+				this.story_AI_output = "";
+			},
+			generateNewStory() {
+				this.loading = true;
+			
+				postData = {
+					'characters': this.story_characters,
+					'location': this.story_location,
+					'summary': this.story_summary,
+					'series': this.selectedSeries
+				};
+				console.log(postData);
+				ajaxurl = "{{ url_for('api_story_generate') }}";
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.loading = false;
+						console.log(res);
+						this.story_title = res.story_title;
+						this.story_AI_output = res.story;
+						this.$nextTick(() => {
+							this.$refs.storyAIOutput.scrollTop = 0;
+						});
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						this.loading = false;
+						console.error(textStatus, errorThrown);
+						this.story_title = "";
+						this.story_AI_output = "Server error. Please try again later.";
+						this.$nextTick(() => {
+							this.$refs.storyAIOutput.scrollTop = 0;
+						});
+					}
+				});
+			},
+			saveStory() {
+				postData = {
+					'series': this.selectedSeries,
+					'characters': this.story_characters,
+					'story_title': this.story_title,
+					'plot': this.story_summary,
+					'location': this.story_location,
+					'full_story': this.story_AI_output,
+				};
+				
+				console.log(postData);
+			},
+			goToCharacterExtractor() {
+				this.currentMenu = 'ImportMainScreen';
+			},
+			scanStory() {
+				postData = {
+					'story': this.imported_story
+				};
+				
+				ajaxurl = "{{ url_for('api_characters_scan') }}";
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						outputCharacters = JSON.parse(res.characters);
+						this.extractedCharacters = outputCharacters.characters;
+						console.log(outputCharacters);
+					}
+				});
+			},
+			viewScannedCharacter(scannedCharacter) {
+				this.subMenuClicked = 'ViewScannedCharacter';
+				this.scannedCharacter = scannedCharacter;
+				
+				this.scanned_character_name = scannedCharacter.name;
+				this.scanned_character_age = scannedCharacter.age;
+				this.scanned_character_gender = scannedCharacter.gender;
+				this.scanned_character_personality = scannedCharacter.personality;
+				this.scanned_character_clique = scannedCharacter.high_school_clique;
+				this.scanned_character_job = scannedCharacter.current_job;
+				this.scanned_character_additional_desc = scannedCharacter.additional_desc;
+				this.scanned_character_cultural_background = "";
+			},
+		}
+	}).mount('#app');
+</script>
+{% endblock %}
