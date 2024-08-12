@@ -457,7 +457,7 @@
 					</template>
 					<template v-else>
 						<div class="list-group list-group-flush border-bottom scrollarea">
-							<p>No stories yet. Why not create one? Or go to Amsterdam to get some stroopwaffel?</p>
+							<p>{{ '{{ emptySeriesText }}' }}</p>
 						</div>
 					</template>
 				</div>
@@ -819,6 +819,19 @@
 				this.subMenuClicked = 'SelectedSeries';
 				this.selectedSeries = series;
 				this.currentStoryIndex = 0; // set the initial story index to 0
+				
+				this.emptySeriesText = "No stories yet. Why not create one? Or go to Amsterdam to get some stroopwaffel?";
+				
+				easterEggTexts = [
+					"go to Amsterdam to get some stroopwaffel",
+					"go to Helsinki and have mantelimassa in a sauna",
+					"go to Tallinn in order to learn how to play the talharpa",
+					"head to Berlin to have some Schweinshaxe",
+					"break the code and some Toblerone in Bern",
+					"look for the cat that meows back in Zagreb",
+					"be free in Yerevan and have some delicious eech",
+					"run away and play the saxophone in Chisinau",
+				];
 			},
 			previousStory() {
 				if (this.currentStoryIndex > 0) {
@@ -912,6 +925,8 @@
 			},
 			goToCharacterExtractor() {
 				this.currentMenu = 'ImportMainScreen';
+				this.subMenuClicked = '';
+				this.subMenu2Clicked = '';
 			},
 			scanStory() {
 				postData = {
