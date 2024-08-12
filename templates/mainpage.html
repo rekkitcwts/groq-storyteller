@@ -293,7 +293,7 @@
 				
 				
 				<p>{{ '{{ fullSelectedCharacter.character.additional_desc }}' }}</p>
-				<button @click="addCharacterConnection()">Add Connection</button>
+				<button class="btn btn-primary" @click="addCharacterConnection()">Add Connection</button>
 				<button>Edit Profile</button>
 				
 					<p>Connections (Relationships with other characters)</p>
@@ -327,7 +327,7 @@
 						</select>
 						<label for="relation">Relation (e.g. boyfriends, cousins, friends, etc)</label>
 						<input class="form-control" name="relation" v-model="relation">
-						<button>Add relation</button>
+						<button class="btn btn-primary">Add relation</button>
 					</form>
 				</div>
 				
@@ -354,7 +354,7 @@
 							</select>
 							<label for="relation">Relation (e.g. boyfriends, cousins, friends, etc)</label>
 							<input class="form-control" name="relation" v-model="relation">
-							<button>Save Changes</button>
+							<button class="btn btn-primary">Save Changes</button>
 						</form>
 					</template>
 				</div>
@@ -407,7 +407,7 @@
 					<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
 					<span class="fs-5 fw-semibold">Everglen Series</span>
 				</a>
-				<button @click="goToNewSeriesSubMenu()">New Series</button>
+				<button class="btn btn-primary" @click="goToNewSeriesSubMenu()">New Series</button>
 				<div class="list-group list-group-flush border-bottom scrollarea">
 					<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" v-for="series in seriesList" :key="series.id" @click="viewSelectedSeries(series)">
 						<div class="d-flex w-100 align-items-center justify-content-between">
@@ -433,7 +433,7 @@
 						<label for="newSeriesDesc">Description</label>
 						<input class="form-control" name="newSeriesDesc" v-model="newSeriesDesc">
 						<br>
-						<button>Add New Series</button> 
+						<button class="btn btn-primary">Add New Series</button> 
 					</form>
 				</div>
 				<div class="list-group list-group-flush border-bottom scrollarea">
@@ -446,10 +446,10 @@
 						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
 						<span class="fs-5 fw-semibold">Story Reader</span>
 					</a>
-					<button @click="viewSeriesSubMenuGenerateNewStory(selectedSeries)">New Chapter/Story</button>
+					<button class="btn btn-primary" @click="viewSeriesSubMenuGenerateNewStory(selectedSeries)">New Chapter/Story</button>
 					<template v-if="selectedSeries.stories.length > 0">
-						<button @click="previousStory" :disabled="currentStoryIndex === 0">Previous</button>
-						<button @click="nextStory" :disabled="currentStoryIndex === selectedSeries.stories.length - 1">Next</button>
+						<button class="btn btn-primary" @click="previousStory" :disabled="currentStoryIndex === 0">Previous</button>
+						<button class="btn btn-primary" @click="nextStory" :disabled="currentStoryIndex === selectedSeries.stories.length - 1">Next</button>
 						<div class="list-group list-group-flush border-bottom scrollarea">
 							<h5>{{ '{{selectedSeries.stories[currentStoryIndex].story_title}}' }}</h5>
 							<p v-html="selectedSeries.stories[currentStoryIndex].full_story.replace(/\n\n/g, '<br><br>')"></p>
@@ -485,7 +485,7 @@
 						<textarea class="form-control" id="story_summary" name="story_summary" v-model="story_summary" rows="5" cols="33">
 						</textarea>
 						
-						<button>Generate with AI</button>
+						<button class="btn btn-primary">Generate with AI</button>
 					</form>
 					
 					<h4>AI Output</h4>
@@ -501,7 +501,7 @@
 						<textarea ref="storyAIOutput" class="form-control" name="story_AI_output" v-model="story_AI_output" rows="5" cols="33">
 						</textarea>
 						 
-						<button>Save as Next Chapter/Story</button>
+						<button class="btn btn-primary">Save as Next Chapter/Story</button>
 					</form>
 					</div>
 				</div>
@@ -520,7 +520,7 @@
 					<textarea class="form-control" name="imported_story" v-model="imported_story" rows="5" cols="33">
 					</textarea>
 						 
-					<button>Scan for Characters</button>
+					<button class="btn btn-primary">Scan for Characters</button>
 				</form>
 				<button>Import Story to Series</button>
 				<div class="list-group list-group-flush border-bottom scrollarea">
@@ -563,7 +563,7 @@
 						<input class="form-control" name="scanned_character_job" v-model="scanned_character_job">
 						<label for="scanned_character_additional_desc">Additional Description</label>
 						<input class="form-control" name="scanned_character_additional_desc" v-model="scanned_character_additional_desc">
-						<button>Add New Character</button> 
+						<button class="btn btn-primary">Add New Character</button> 
 						</form>
 					
 						<p>Info here for an existing character</p>
