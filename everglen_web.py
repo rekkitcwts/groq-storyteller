@@ -223,6 +223,26 @@ def api_story_generate():
         print(str(e))
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/stories/humanize', methods=['POST'])
+def api_story_humanize():
+    something = byteNonsense(request.data)
+    print(something)
+    story_original = something['story']
+    characters = something['story_characters']
+    character_AI_models = []
+    character_relationships = []
+    for key in characters:
+        character = characters[key]
+        character_db_model = CharacterDB.query.filter_by(id=character['id']).first()
+        character_AI_models.append(character_db_model.getAIModel())
+        char_rel = getCharacterRelationships(character_db_model)
+        character_relationships = character_relationships + char_rel
+    
+    output = story_humanizer(story_original, character_AI_models, character_relationships)
+    print(output)
+    #return jsonify({"story": output})
+    
+
 @app.route('/api/stories/save', methods=['POST'])
 def api_story_save():
     something = byteNonsense(request.data)
@@ -672,3 +692,58 @@ def extract_characters(story: str) -> str:
         return f"Failed to parse JSON: {e}"
     except Exception as ge:
         return f"Bad Request: {ge}"
+
+def story_humanizer(story: str, custom_characters: Optional[List[Character]] = None, relationships: Optional[List[Relationship]] = None) -> str:
+    # Construct character data
+    character_data = ""
+    if custom_characters:
+        character_data = ", ".join([f"{char.dict()}" for char in custom_characters])
+        #character_data = ", ".join([f"{char.name} (gender: {char.gender}, age: {char.age}, personality: {char.personality}, high_school_clique: {char.high_school_clique}, cultural_background: {char.cultural_background}, native_languages: {char.native_languages}, current_job: {char.current_job}, outfit: {char.outfit}, additional_desc: {char.additional_desc})" for char in custom_characters])
+        
+    optional_params = ""
+    if relationships:
+        relationship_data = ", ".join([f"{rel.dict()}" for rel in relationships])
+        optional_params += f" 'relationships': [{relationship_data}],"
+        
+    try:
+        completion = client.chat.completions.create(
+            model="mixtral-8x7b-32768",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a story improver. Rewrite this story in a witty, engaging, and emotionally resonant tone that is suitable for a high school setting. Ensure that the output is in JSON format with the following schema: \n{\nstory_title: {type: string},\nimproved_story: {type: string}\n}"
+                },
+                {
+                    "role": "user",
+                    "content": f"Rewrite the following story: {story}. "
+                        f"{', and use the following custom characters when they are mentioned by name within the story: [' + character_data + ']' if custom_characters else ''}"
+                        f"{', and include the following optional parameters: {' + optional_params + '}' if optional_params else ''}"
+                }
+            ],
+            temperature=0.8,
+            max_tokens=1024,
+            top_p=1,
+            stream=False,
+            response_format={"type": "json_object"},
+            stop=None,
+        )
+        
+        story = json.loads(completion.choices[0].message.content)
+        
+        story_json = json.dumps(story, indent=4)  # Pretty-print the JSON
+        print(story)
+        return story_json
+    except groq.BadRequestError as bre:
+        print("Error in generate_story:")
+        print(bre.message)
+        return {"error": "Groq - Bad Request", "contents": bre.message}
+    except groq.InternalServerError as ire:
+        print("Error in generate_story:")
+        print(ire.message)
+        return {"error": "Groq - Internal Server Error", "contents": ire.message}
+    except Exception as ge:
+        print("Error in generate_story:")
+        print(ge)
+        print(type(ge).__name__)
+        return ge
+        

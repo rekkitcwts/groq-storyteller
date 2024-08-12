@@ -522,7 +522,7 @@
 						 
 					<button class="btn btn-primary">Scan for Characters</button>
 				</form>
-				<button>Import Story to Series</button>
+				<button @click="goToStoryImporter">Import Story to Series</button>
 				<div class="list-group list-group-flush border-bottom scrollarea">
 					<a href="#" class="list-group-item list-group-item-action py-3 lh-tight" v-for="(extractedCharacter, key) in extractedCharacters" :key="key" @click="viewScannedCharacter(extractedCharacter)">
 						<div class="d-flex w-100 align-items-center justify-content-between">
@@ -539,7 +539,7 @@
 			
 			<template v-if="subMenuClicked == 'ViewScannedCharacter'">
 				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
-					<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
 						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
 						<span class="fs-5 fw-semibold">Viewing Scanned Character</span>
 					</a>
@@ -573,6 +573,36 @@
 				
 				
 			</template>
+			
+			<template v-if="subMenuClicked == 'ImportStoryScreen'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Import Story</span>
+					</a>
+					
+					<div class="list-group list-group-flush border-bottom scrollarea">
+						<form @submit.prevent="rephraseOrSaveStory">
+							<label for="story_review">Story</label>
+							<textarea class="form-control" name="story_review" v-model="story_review" rows="5" cols="33">
+							</textarea>
+							<label for="series_title">Series</label>
+							<select name="series_title" class="form-select" v-model="series_title">
+								<option v-for="series in seriesList" :key="series.id" :value="series" v-text="series.series_name"></option>
+							</select>
+							<label for="story_characters">Characters</label>
+							<select class="form-select" v-model="story_characters" multiple>
+								<option v-for="character in charactersList" :key="character.id" :value="character">{{ '{{ character.character_name }}' }}</option>
+							</select>
+							<input type="radio" id="rephrase" value="rephrase" v-model="rephraseSave" />
+							<label for="rephrase">Rephrase with AI</label>
+							<input type="radio" id="save" value="save" v-model="rephraseSave" />
+							<label for="save">Add to Series</label>
+							<button class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</template>
 		</template>
 	</main>
 {% endblock %}
@@ -604,6 +634,7 @@
 				extractedCharacters: [],
 				scannedCharacter: '',
 				comparedCharacter: '',
+				rephraseSave: 'rephrase', // set initial value to 'rephrase'
 			};
 		},
 		created() {
@@ -646,7 +677,6 @@
 					context: this,
 					success: function(res) {
 						this.seriesList = res;
-						console.log(res);
 					}
 				});
 			},
@@ -919,6 +949,7 @@
 						this.story_title = ""
 						this.story_AI_output = "";
 						this.subMenuClicked = 'SelectedSeries';
+						this.fetchSeries();
 					}
 				});
 				
@@ -961,6 +992,40 @@
 				this.scanned_character_job = scannedCharacter.current_job;
 				this.scanned_character_additional_desc = scannedCharacter.additional_desc;
 				this.scanned_character_cultural_background = "";
+			},
+			goToStoryImporter() {
+				this.subMenuClicked = 'ImportStoryScreen';
+				this.fetchSeries();
+				this.fetchCharacters();
+				this.story_review = this.imported_story;
+			},
+			rephraseOrSaveStory() {
+				postData = {
+					story : this.story_review,
+					story_series : this.series_title,
+					story_characters : this.story_characters
+				};
+				ajaxurl = '';
+				
+				if (this.rephraseSave == 'rephrase') {
+					ajaxurl = "{{ url_for('api_story_humanize') }}";
+					
+					$.ajax({
+						url: ajaxurl, 
+						method:"post", 
+						data: postData, // Replace 'this' with self'' 
+						contentType: 'application/json',
+						dataType: 'json',
+						context: this,
+						success: function(res) {
+							this.story_review = res;
+						}
+					});
+				}
+				if (this.rephraseSave == 'save') {
+					console.log("save");
+					console.log(postData);
+				}
 			},
 		}
 	}).mount('#app');
