@@ -53,6 +53,12 @@ class SeriesDB(db.Model):
     def getAIModel(self):
         seriesAImodel = Series(series_name = self.series_name, series_desc = self.series_desc)
         return seriesAImodel
+        
+    def __eq__(self, other):
+        if isinstance(other, SeriesDB):
+            return (self.series_name == other.series_name and
+                    self.series_desc == other.series_desc)
+        return NotImplemented
     
 class StoryDB(db.Model):
     __tablename__ = 'stories'
@@ -133,6 +139,13 @@ class RelationshipDB(db.Model):
         )
         
         return relationshipAImodel
+    
+    def __eq__(self, other):
+        if isinstance(other, RelationshipDB):
+            return (self.char_subject_id == other.char_subject_id and
+                    self.char_object_id == other.char_object_id and
+                    self.relation == other.relation)
+        return NotImplemented
     
     def __json__(self):
         jsonRelation = {
