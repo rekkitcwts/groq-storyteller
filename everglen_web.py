@@ -226,8 +226,8 @@ def api_story_generate():
 @app.route('/api/stories/humanize', methods=['POST'])
 def api_story_humanize():
     something = byteNonsense(request.data)
-    print(something)
-    story_original = something['story']
+    #print(something)
+    story_original = something['original_story']
     characters = something['story_characters']
     character_AI_models = []
     character_relationships = []
@@ -238,9 +238,9 @@ def api_story_humanize():
         char_rel = getCharacterRelationships(character_db_model)
         character_relationships = character_relationships + char_rel
     
-    output = story_humanizer(story_original, character_AI_models, character_relationships)
+    output = story_humanizer_nonjson(story_original, character_AI_models, character_relationships)
     print(output)
-    #return jsonify({"story": output})
+    return jsonify({"output": output}), 200
     
 
 @app.route('/api/stories/save', methods=['POST'])
@@ -693,57 +693,64 @@ def extract_characters(story: str) -> str:
     except Exception as ge:
         return f"Bad Request: {ge}"
 
-def story_humanizer(story: str, custom_characters: Optional[List[Character]] = None, relationships: Optional[List[Relationship]] = None) -> str:
+def story_humanizer_nonjson(story: str, custom_characters: Optional[List[Character]] = None, relationships: Optional[List[Relationship]] = None) -> dict[str, str]:
     # Construct character data
-    character_data = ""
+    character_data = []
     if custom_characters:
-        character_data = ", ".join([f"{char.dict()}" for char in custom_characters])
-        #character_data = ", ".join([f"{char.name} (gender: {char.gender}, age: {char.age}, personality: {char.personality}, high_school_clique: {char.high_school_clique}, cultural_background: {char.cultural_background}, native_languages: {char.native_languages}, current_job: {char.current_job}, outfit: {char.outfit}, additional_desc: {char.additional_desc})" for char in custom_characters])
-        
-    optional_params = ""
+        character_data = [char.dict() for char in custom_characters]
+
+    optional_params = {}
     if relationships:
-        relationship_data = ", ".join([f"{rel.dict()}" for rel in relationships])
-        optional_params += f" 'relationships': [{relationship_data}],"
+        optional_params['relationships'] = [rel.dict() for rel in relationships]
         
     try:
-        completion = client.chat.completions.create(
+        completion1 = client.chat.completions.create(
             model="mixtral-8x7b-32768",
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a story improver. Rewrite this story in a witty, engaging, and emotionally resonant tone that is suitable for a high school setting. Ensure that the output is in JSON format with the following schema: \n{\nstory_title: {type: string},\nimproved_story: {type: string}\n}"
+                    "content": "You are a story improver. Rewrite this story in a witty, engaging, and emotionally resonant tone that is suitable for a high school setting. Here are some examples of the type of story I'm looking for: 'Nick and Charlie' by Alice Oseman, 'The Perks of Being a Wallflower' by Stephen Chbosky, and 'Paper Towns' by John Green."
+
                 },
                 {
                     "role": "user",
                     "content": f"Rewrite the following story: {story}. "
-                        f"{', and use the following custom characters when they are mentioned by name within the story: [' + character_data + ']' if custom_characters else ''}"
-                        f"{', and include the following optional parameters: {' + optional_params + '}' if optional_params else ''}"
+                        f"{', and use the following custom characters when they are mentioned by name within the story: ' + json.dumps(character_data) if custom_characters else ''}"
+                        f"{', and include the following optional parameters: ' + json.dumps(optional_params) if optional_params else ''}"
                 }
             ],
             temperature=0.8,
             max_tokens=1024,
             top_p=1,
             stream=False,
-            response_format={"type": "json_object"},
             stop=None,
         )
         
-        story = json.loads(completion.choices[0].message.content)
+        improved_story = completion1.choices[0].message.content
         
-        story_json = json.dumps(story, indent=4)  # Pretty-print the JSON
-        print(story)
-        return story_json
-    except groq.BadRequestError as bre:
-        print("Error in generate_story:")
-        print(bre.message)
-        return {"error": "Groq - Bad Request", "contents": bre.message}
-    except groq.InternalServerError as ire:
-        print("Error in generate_story:")
-        print(ire.message)
-        return {"error": "Groq - Internal Server Error", "contents": ire.message}
-    except Exception as ge:
-        print("Error in generate_story:")
-        print(ge)
-        print(type(ge).__name__)
-        return ge
+        completion2 = client.chat.completions.create(
+            model="mixtral-8x7b-32768",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a title generator. Generate a catchy and relevant title for the following story."
+                },
+                {
+                    "role": "user",
+                    "content": f"Generate a title for the story: {improved_story}."
+                }
+            ],
+            temperature=0.8,
+            max_tokens=1024,
+            top_p=1,
+            stream=False,
+            stop=None,
+        )
+        
+        title = completion2.choices[0].message.content
+        output = {"improved_story": improved_story, "title": title}
+        
+        return output
+    except Exception as e:
+        print("Error in story_humanizer_nonjson:")
         

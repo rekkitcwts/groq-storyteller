@@ -583,6 +583,8 @@
 					
 					<div class="list-group list-group-flush border-bottom scrollarea">
 						<form @submit.prevent="rephraseOrSaveStory">
+							<label for="story_title">Story Title (Leave blank for AI to make its own title)</label>
+							<input class="form-control" name="story_title" v-model="story_title">
 							<label for="story_review">Story</label>
 							<textarea class="form-control" name="story_review" v-model="story_review" rows="5" cols="33">
 							</textarea>
@@ -635,6 +637,8 @@
 				scannedCharacter: '',
 				comparedCharacter: '',
 				rephraseSave: 'rephrase', // set initial value to 'rephrase'
+				story_title: '',
+				story_review: '',
 			};
 		},
 		created() {
@@ -1001,7 +1005,7 @@
 			},
 			rephraseOrSaveStory() {
 				postData = {
-					story : this.story_review,
+					original_story: this.story_review,
 					story_series : this.series_title,
 					story_characters : this.story_characters
 				};
@@ -1018,7 +1022,12 @@
 						dataType: 'json',
 						context: this,
 						success: function(res) {
-							this.story_review = res;
+							if (this.story_title == "") {
+								this.story_title = res.output.title;
+							}
+							this.story_review = res.output.improved_story;
+							console.log(res.output.title);
+							//alert(res);
 						}
 					});
 				}
