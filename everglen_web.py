@@ -245,16 +245,39 @@ def api_story_humanize():
 
 @app.route('/api/stories/save', methods=['POST'])
 def api_story_save():
+    story_title = ""
+    plot = ""
+    location = ""
+
     something = byteNonsense(request.data)
-    print(something)
+    print(something['story_origin'])
     series = SeriesDB.query.filter_by(id=something['series']['id']).first()
     characters = something['characters']
-    story_title = something['story_title']
-    plot = something['plot']
-    location = something['location']
+    
     full_story = something['full_story']
     num_episodes = StoryDB.query.filter_by(series_id=something['series']['id']).count()
     new_episode_number = num_episodes + 1
+    
+    if something['story_origin'] == "generated_from_plot":
+        story_title = something['story_title']
+        plot = something['plot']
+        location = something['location']
+    if something['story_origin'] == "imported":
+        character_AI_models = []
+        character_relationships = []
+        for key in characters:
+            character = characters[key]
+            character_db_model = CharacterDB.query.filter_by(id=character['id']).first()
+            character_AI_models.append(character_db_model.getAIModel())
+            char_rel = getCharacterRelationships(character_db_model)
+            character_relationships = character_relationships + char_rel
+        
+        output = story_humanizer_nonjson(full_story, character_AI_models, character_relationships)
+        sumloc = summary_and_location_generator(full_story, character_AI_models, character_relationships)
+        print(sumloc)
+        story_title = output['title']
+        plot = sumloc['summary']
+        location = sumloc['location']
     
     newStory = StoryDB(
         story_title = story_title,
@@ -635,7 +658,7 @@ def generate_detailed_scene(day: str, summary: str, language: Optional[str] = "E
                 {
                     "role": "system",
                     "content": (
-                        f"You are a story generator. Expand this following plot summary written in {language} into a detailed scene in {language} for a high school story."
+                        f"You are a story generator. Expand this following plot summary written in {language} into a detailed scene in {language}, in a witty, engaging, and emotionally resonant tone that is suitable for a high school setting. Here are some examples of the type of story I'm looking for: 'Nick and Charlie' by Alice Oseman, 'The Perks of Being a Wallflower' by Stephen Chbosky, and 'Paper Towns' by John Green."
                     )
                 },
                 {
@@ -754,3 +777,64 @@ def story_humanizer_nonjson(story: str, custom_characters: Optional[List[Charact
     except Exception as e:
         print("Error in story_humanizer_nonjson:")
         
+def summary_and_location_generator(story: str, custom_characters: Optional[List[Character]] = None, relationships: Optional[List[Relationship]] = None) -> dict[str, str]:
+    # Construct character data
+    character_data = []
+    if custom_characters:
+        character_data = [char.dict() for char in custom_characters]
+
+    optional_params = {}
+    if relationships:
+        optional_params['relationships'] = [rel.dict() for rel in relationships]
+    
+    try:
+        completion1 = client.chat.completions.create(
+            model="mixtral-8x7b-32768",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a story descriptor. Summarize a plot of the entire story."
+
+                },
+                {
+                    "role": "user",
+                    "content": f"Summarize the following story: {story}. "
+                        f"{', and use the following custom characters when they are mentioned by name within the story: ' + json.dumps(character_data) if custom_characters else ''}"
+                        f"{', and include the following optional parameters: ' + json.dumps(optional_params) if optional_params else ''}"
+                }
+            ],
+            temperature=0.8,
+            max_tokens=1024,
+            top_p=1,
+            stream=False,
+            stop=None,
+        )
+        
+        shortened_plot = completion1.choices[0].message.content
+        
+        completion2 = client.chat.completions.create(
+            model="mixtral-8x7b-32768",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a story analyzer. Extract the location of the story. If the location is given in the story as Everglen, assume it is Everglen, NY."
+                },
+                {
+                    "role": "user",
+                    "content": f"Get the location of the following story: {story}."
+                }
+            ],
+            temperature=0.8,
+            max_tokens=1024,
+            top_p=1,
+            stream=False,
+            stop=None,
+        )
+        
+        story_location = completion2.choices[0].message.content
+        output = {"summary": shortened_plot, "location": story_location}
+        
+        return output
+    except Exception as e:
+        print("Error in story_humanizer_nonjson:")
+        print(str(e))

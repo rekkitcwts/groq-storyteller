@@ -928,6 +928,7 @@
 			},
 			saveStory() {
 				postData = {
+					'story_origin': "generated_from_plot",
 					'series': this.selectedSeries,
 					'characters': this.story_characters,
 					'story_title': this.story_title,
@@ -1004,14 +1005,15 @@
 				this.story_review = this.imported_story;
 			},
 			rephraseOrSaveStory() {
-				postData = {
-					original_story: this.story_review,
-					story_series : this.series_title,
-					story_characters : this.story_characters
-				};
+				postData = {};
 				ajaxurl = '';
 				
 				if (this.rephraseSave == 'rephrase') {
+					postData = {
+						original_story: this.story_review,
+						story_series : this.series_title,
+						story_characters : this.story_characters
+					};
 					ajaxurl = "{{ url_for('api_story_humanize') }}";
 					
 					$.ajax({
@@ -1027,13 +1029,37 @@
 							}
 							this.story_review = res.output.improved_story;
 							console.log(res.output.title);
-							//alert(res);
+							
 						}
 					});
 				}
 				if (this.rephraseSave == 'save') {
-					console.log("save");
+					postData = {
+						'story_origin': "imported",
+						'series': this.series_title,
+						'characters': this.story_characters,
+						'full_story': this.story_review,
+					};
 					console.log(postData);
+					
+					ajaxurl = "{{ url_for('api_story_save') }}";
+				
+					$.ajax({
+						url: ajaxurl, 
+						method:"post", 
+						data: postData, // Replace 'this' with self'' 
+						contentType: 'application/json',
+						dataType: 'json',
+						context: this,
+						success: function(res) {
+							console.log(res);
+							this.series_title = '';
+							this.story_characters = [];
+							this.story_review = "";
+							this.subMenuClicked = '';
+
+						}
+					});
 				}
 			},
 		}
