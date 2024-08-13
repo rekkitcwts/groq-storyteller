@@ -739,7 +739,7 @@ def story_humanizer_nonjson(story: str, custom_characters: Optional[List[Charact
                     "role": "user",
                     "content": f"Rewrite the following story: {story}. "
                         f"{', and use the following custom characters when they are mentioned by name within the story: ' + json.dumps(character_data) if custom_characters else ''}"
-                        f"{', and include the following optional parameters: ' + json.dumps(optional_params) if optional_params else ''}"
+                        f"{', and take note of the relationships between the characters : ' + json.dumps(optional_params) if optional_params else ''}"
                 }
             ],
             temperature=0.8,
@@ -756,7 +756,7 @@ def story_humanizer_nonjson(story: str, custom_characters: Optional[List[Charact
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a title generator. Generate a catchy and relevant title for the following story."
+                    "content": "You are a title generator. Generate a catchy and relevant title for the following story. Please provide only one title option."
                 },
                 {
                     "role": "user",
@@ -793,7 +793,7 @@ def summary_and_location_generator(story: str, custom_characters: Optional[List[
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a story descriptor. Summarize a plot of the entire story."
+                    "content": "You are a story descriptor. Summarize a plot of the entire story in one paragraph."
 
                 },
                 {
