@@ -429,9 +429,9 @@
 					</a>
 					<form @submit.prevent="addNewSeries">
 						<label for="newSeriesTitle">Series Title</label>
-						<input class="form-control" name="newSeriesTitle" v-model="newSeriesTitle">
+						<input class="form-control" name="newSeriesTitle" v-model="newSeriesTitle" required>
 						<label for="newSeriesDesc">Description</label>
-						<input class="form-control" name="newSeriesDesc" v-model="newSeriesDesc">
+						<input class="form-control" name="newSeriesDesc" v-model="newSeriesDesc" required>
 						<br>
 						<button class="btn btn-primary">Add New Series</button> 
 					</form>
@@ -439,6 +439,8 @@
 				<div class="list-group list-group-flush border-bottom scrollarea">
 					
 				</div>
+				
+				<div class="b-example-divider"></div>
 			</template>
 			<template v-if="subMenuClicked == 'SelectedSeries'">
 				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 580px;">
@@ -744,7 +746,11 @@
 					dataType: 'json',
 					context: this,
 					success: function(res) {
-						console.log(res)
+						this.fetchSeries();
+						this.newSeriesTitle = '';
+						this.newSeriesDesc = '';
+						this.subMenuClicked = '';
+						
 					}
 				});
 			},

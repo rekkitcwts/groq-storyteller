@@ -613,7 +613,7 @@ def generate_story(scenario: str, custom_characters: Optional[List[Character]] =
                     "role": "user",
                     "content": f"Generate a story involving the following scenario: {scenario}. "
                         f"{', and use the following custom characters: [' + character_data + ']' if custom_characters else ''}"
-                        f"{', and include the following optional parameters: {' + optional_params + '}' if optional_params else ''}"
+                        f"{', and apply the following optional parameters: {' + optional_params + '}' if optional_params else ''}"
                 }
             ],
             temperature=0.8,
