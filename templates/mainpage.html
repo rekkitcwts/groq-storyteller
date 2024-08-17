@@ -216,6 +216,8 @@
   <div class="b-example-divider"></div>
 	
 	</template>
+	
+		<!-- All Screens under the Home Menu -->
 		<template v-if="currentMenu == 'HomeMainScreen'">
 			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
 				<a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
@@ -226,6 +228,7 @@
 			</div>
 		</template>
 		
+		<!-- All Screens under the Characters Menu -->
 		<template v-if="currentMenu == 'CharactersMainScreen'">
 			<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
 				<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
@@ -294,7 +297,7 @@
 				
 				<p>{{ '{{ fullSelectedCharacter.character.additional_desc }}' }}</p>
 				<button class="btn btn-primary" @click="addCharacterConnection()">Add Connection</button>
-				<button>Edit Profile</button>
+				<button class="btn btn-primary" @click="editCharacterProfile()">Edit Profile</button>
 				
 					<p>Connections (Relationships with other characters)</p>
 					<div class="list-group list-group-flush border-bottom scrollarea">
@@ -364,6 +367,36 @@
 				</div>
 			</template>
 			
+			<template v-if="subMenu2Clicked == 'EditCharacterProfile'">
+				<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 300px;">
+					<a href="#" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+						<svg class="bi me-2" width="30" height="24"><use xlink:href="#home"/></svg>
+						<span class="fs-5 fw-semibold">Edit Character Connection</span>
+					</a>
+					<form @submit.prevent="updateChangesProfile(fullSelectedCharacter)">
+						<label for="edit_character_name">Name</label>
+						<input class="form-control" name="edit_character_name" v-model="edit_character_name" required>
+						<label for="edit_character_age">Age</label>
+						<input class="form-control" name="edit_character_age" v-model="edit_character_age" required>
+						<label for="edit_character_gender">Gender</label>
+						<input class="form-control" name="edit_character_gender" v-model="edit_character_gender" required>
+						<label for="new_character_personality">Personality</label>
+						<input class="form-control" name="new_character_personality" v-model="new_character_personality">
+						<button @click="pickRandomPersonality()">Pick a random personality</button>
+						<br>
+						<label for="edit_character_clique">Clique</label>
+						<input class="form-control" name="edit_character_clique" v-model="edit_character_clique">
+						<label for="edit_character_cultural_background">Cultural Background</label>
+						<input class="form-control" name="edit_character_cultural_background" v-model="edit_character_cultural_background">
+						<label for="edit_character_job">Current Job</label>
+						<input class="form-control" name="edit_character_job" v-model="edit_character_job">
+						<label for="edit_character_additional_desc">Additional Description</label>
+						<input class="form-control" name="edit_character_additional_desc" v-model="edit_character_additional_desc">
+						<button>Edit Character Profile</button> 
+					</form>
+				</div>
+			</template>
+			
 		</template>
 		
 		<template v-if="subMenuClicked == 'NewCharacterEntry'">
@@ -375,13 +408,14 @@
 					</a>
 					<form @submit.prevent="addNewCharacter">
 						<label for="new_character_name">Name</label>
-						<input class="form-control" name="new_character_name" v-model="new_character_name">
+						<input class="form-control" name="new_character_name" v-model="new_character_name" required>
 						<label for="new_character_age">Age</label>
-						<input class="form-control" name="new_character_age" v-model="new_character_age">
+						<input class="form-control" name="new_character_age" v-model="new_character_age" required>
 						<label for="new_character_gender">Gender</label>
-						<input class="form-control" name="new_character_gender" v-model="new_character_gender">
+						<input class="form-control" name="new_character_gender" v-model="new_character_gender" required>
 						<label for="new_character_personality">Personality</label>
 						<input class="form-control" name="new_character_personality" v-model="new_character_personality">
+						<button @click="pickRandomPersonality()">Pick a random personality</button>
 						<br>
 						<label for="new_character_clique">Clique</label>
 						<input class="form-control" name="new_character_clique" v-model="new_character_clique">
@@ -625,7 +659,6 @@
 				fullSelectedCharacter: '',
 				selectedRelation: '',
 				seriesList: [],
-				// selectedSeries: '',
 				storiesList: [],
 				currentStoryIndex: 0,
 				subMenuClicked: '',
@@ -641,6 +674,11 @@
 				rephraseSave: 'rephrase', // set initial value to 'rephrase'
 				story_title: '',
 				story_review: '',
+				new_character_name: '',
+				new_character_age: '',
+				new_character_gender: '',
+				new_character_personality: '',
+				
 			};
 		},
 		created() {
@@ -699,7 +737,67 @@
 			goToNewCharacterSubMenu() {
 				this.subMenuClicked = 'NewCharacterEntry';
 			},
+			pickRandomPersonality() {
+				const personalities = [
+					'confident', 'athletic', 'popular',
+					'intelligent', 'studious', 'bookworm',
+					'creative', 'expressive', 'artistic',
+					'socially awkward', 'misunderstood', 'outcast',
+					'non-conformist', 'independent', 'rebellious',
+					'well-dressed', 'well-mannered', 'preppy',
+					'dark', 'mysterious', 'gothic',
+					'sensitive', 'emotional', 'emo',
+					'loyal', 'supportive',
+					'charming', 'confident',
+					'creative', 'expressive', 'muse',
+					'confidant', 'accomplice', 'rival',
+					'admirer', 'supporter'
+				]
+				let selectedPersonalities = [];
+
+				// Pick three random personalities
+				for (let i = 0; i < 3; i++) {
+					let randomIndex = Math.floor(Math.random() * personalities.length);
+					let randomPersonality = personalities[randomIndex];
+        
+				// Add the selected personality to the array
+				selectedPersonalities.push(randomPersonality);
+        
+				// Remove the chosen personality from the array to avoid repeating
+				personalities.splice(randomIndex, 1);
+				}
+
+				// Merge the selected personalities into one string
+				let mergedPersonalities = selectedPersonalities.join(', ');
+
+				// Set the new_character_personality input to the merged personalities string
+				this.new_character_personality = mergedPersonalities;
+			},
 			addNewCharacter() {
+				ajaxurl = "{{ url_for('api_characters_add') }}";
+				postData = {
+					"character_made": "manual_add",
+					"name": this.new_character_name,
+					"age": this.new_character_age,
+					"gender": this.new_character_gender,
+					"personality": this.new_character_personality,
+					"high_school_clique": this.new_character_clique,
+					"current_job": this.new_character_job,
+					"additional_desc": this.new_character_additional_desc,
+					"cultural_background": this.new_character_cultural_background
+				};
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.subMenuClicked = '';
+					}
+				});
 			},
 			addNewCharacterScanned() {
 				ajaxurl = "{{ url_for('api_characters_add') }}";
@@ -842,6 +940,44 @@
 				};
 				
 				ajaxurl = "{{ url_for('api_relationships_edit') }}";
+				
+				$.ajax({
+					url: ajaxurl, 
+					method:"post", 
+					data: postData, // Replace 'this' with self'' 
+					contentType: 'application/json',
+					dataType: 'json',
+					context: this,
+					success: function(res) {
+						this.subMenu2Clicked = '';
+					}
+				});
+			},
+			editCharacterProfile() {
+				character = this.fullSelectedCharacter.character;
+				this.subMenu2Clicked = 'EditCharacterProfile';
+				this.edit_character_name = character.character_name;
+				this.edit_character_age = character.character_age;
+				this.edit_character_gender = character.character_gender;
+				this.new_character_personality = character.character_personality;
+				this.edit_character_clique = character.high_school_clique;
+				this.edit_character_cultural_background = character.cultural_background;
+				this.edit_character_job = character.current_job;
+				this.edit_character_additional_desc = character.additional_desc;
+			},
+			updateChangesProfile(full_character) {
+				ajaxurl = "{{ url_for('api_characters_edit') }}";
+				postData = {
+					"id": full_character.character.id,
+					"name": this.edit_character_name,
+					"age": this.edit_character_age,
+					"gender": this.edit_character_gender,
+					"personality": this.new_character_personality,
+					"high_school_clique": this.edit_character_clique,
+					"current_job": this.edit_character_job,
+					"additional_desc": this.edit_character_additional_desc,
+					"cultural_background": this.edit_character_cultural_background
+				};
 				
 				$.ajax({
 					url: ajaxurl, 

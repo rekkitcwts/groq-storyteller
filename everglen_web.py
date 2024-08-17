@@ -123,6 +123,22 @@ def api_characters_view(character_id):
     print(full_character_details)
     return jsonify(full_character_details)
     
+@app.route('/api/characters/edit', methods=['POST'])
+def api_characters_edit():
+    something = byteNonsense(request.data)
+    character_id = something['id']
+    character = CharacterDB.query.filter_by(id=character_id).first()
+    character.character_name = something['name']
+    character.character_age = something['age']
+    character.character_gender = something['gender']
+    character.character_personality = something['personality']
+    character.high_school_clique = something['high_school_clique']
+    character.cultural_background = something['cultural_background']
+    character.current_job = something['current_job']
+    character.additional_desc = something['additional_desc']
+    db.session.commit()
+    return jsonify({'character_id': character_id, 'message': 'PROFILE_UPDATED' , 'status': 'OK'})
+
 '''
 APIs for handling character connections,
 also known as Relationships in the database and in Groq.
@@ -545,6 +561,53 @@ Harold, Nikolai, and Jervey nodded in agreement, eager to try the dish. As they 
     
     return "Check command line for output"
 
+
+@app.route('/tests/plothole')
+def test_plothole():
+    # Get all stories in the series with id=1
+    max_diary = StoryDB.query.filter_by(series_id=1).all()
+
+    # Initialize empty lists to store stories, characters, character AI models, and character relationships
+    stories = []
+    characters = []
+    character_AI_models = []
+    character_relationships = []
+
+    # Loop through each story in the series
+    for story in max_diary:
+        # Add the full story to the stories list
+        stories.append(story.full_story)
+
+        # Get all characters in the story
+        story_char_db = StoryCharactersDB.query.filter_by(story_id=story.id).all()
+
+        # Loop through each character in the story
+        for character_id in story_char_db:
+            # Check if the character is already in the characters list
+            if character_id.char_id not in characters:
+                # If the character is not in the characters list, add it
+                characters.append(character_id.char_id)
+
+                # Get the character from the CharacterDB model
+                character = CharacterDB.query.filter_by(id=character_id.char_id).first()
+
+                # Add the character's AI model to the character_AI_models list
+                character_AI_models.append(character.getAIModel())
+
+                # Get the character's relationships and add them to the character_relationships list
+                char_rel = getCharacterRelationships(character)
+                character_relationships = character_relationships + char_rel
+
+    # Call the plot_hole_detector function with the stories list as an argument
+    plot_holes = plot_hole_detector(stories)
+
+    # Print the plot holes to the console
+    print(plot_holes)
+
+    # Return a message to indicate that the output is printed to the console
+    return "Check command line for output"
+
+
 '''
 Core story-generating code
 '''
@@ -800,7 +863,7 @@ def summary_and_location_generator(story: str, custom_characters: Optional[List[
                     "role": "user",
                     "content": f"Summarize the following story: {story}. "
                         f"{', and use the following custom characters when they are mentioned by name within the story: ' + json.dumps(character_data) if custom_characters else ''}"
-                        f"{', and include the following optional parameters: ' + json.dumps(optional_params) if optional_params else ''}"
+                        f"{', and apply the following optional parameters: ' + json.dumps(optional_params) if optional_params else ''}"
                 }
             ],
             temperature=0.8,
@@ -835,6 +898,52 @@ def summary_and_location_generator(story: str, custom_characters: Optional[List[
         output = {"summary": shortened_plot, "location": story_location}
         
         return output
+    except Exception as e:
+        print("Error in story_humanizer_nonjson:")
+        print(str(e))
+        
+def plot_hole_detector(stories: List[str], custom_characters: Optional[List[Character]] = None, relationships: Optional[List[Relationship]] = None) -> str:
+    # Construct character data
+    character_data = []
+    if custom_characters:
+        character_data = [char.dict() for char in custom_characters]
+
+    optional_params = {}
+    if relationships:
+        optional_params['relationships'] = [rel.dict() for rel in relationships]
+        
+    try:
+        completion = client.chat.completions.create(
+            model="mixtral-8x7b-32768",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a story analyzer. The stories are arranged in chronological order from the first story to the latest. Find any plot holes in the series of stories, also checking if a later story is inconsistent with any previous ones."
+                        "Ensure that the output is in JSON format with the following schema:\n"
+                        "{\n"
+                        "  \"plot_holes\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}}\n"
+                        "}\n"
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Analyze these stories: {stories}, and list all plot holes."
+                        f"{', and use the following custom characters when they are mentioned by name within each plot hole: ' + json.dumps(character_data) if custom_characters else ''}"
+                        f"{', and apply the following optional parameters: ' + json.dumps(optional_params) if optional_params else ''}"
+                }
+            ],
+            temperature=0.8,
+            max_tokens=1024,
+            top_p=1,
+            stream=False,
+            response_format={"type": "json_object"},
+            stop=None,
+        )
+        
+        plot_holes = json.loads(completion.choices[0].message.content)
+        plot_holes_json = json.dumps(plot_holes, indent=4)  # Pretty-print the JSON
+        return plot_holes_json
     except Exception as e:
         print("Error in story_humanizer_nonjson:")
         print(str(e))
