@@ -291,7 +291,10 @@ def api_story_save():
         output = story_humanizer_nonjson(full_story, character_AI_models, character_relationships)
         sumloc = summary_and_location_generator(full_story, character_AI_models, character_relationships)
         print(sumloc)
-        story_title = output['title']
+        if something['story_title'] or something['story_title'] != "":
+            story_title = something['story_title']
+        else:
+            story_title = output['title']
         plot = sumloc['summary']
         location = sumloc['location']
     
@@ -437,10 +440,10 @@ def generate_story(scenario: str, custom_characters: Optional[List[Character]] =
                     "role": "user",
                     "content": f"Generate a story involving the following scenario: {scenario}. "
                         f"{', and use the following custom characters: [' + character_data + ']' if custom_characters else ''}"
-                        f"{', and apply the following optional parameters: {' + optional_params + '}' if optional_params else ''}"
+                        f"{', and apply the following additional information to the story: {' + optional_params + '}' if optional_params else ''}"
                 }
             ],
-            temperature=0.8,
+            temperature=1,
             max_tokens=1024,
             top_p=1,
             stream=False,
