@@ -461,6 +461,11 @@
 						<svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
 						<span class="fs-5 fw-semibold">New Series</span>
 					</a>
+                    <!-- use bootstrap alerts here -->
+                    <div v-if="loading" class="loading-spinner">
+						<i class="fas fa-spinner fa-spin"></i> Adding new story series. Please wait.
+					</div>
+                    
 					<form @submit.prevent="addNewSeries">
 						<label for="newSeriesTitle">Series Title</label>
 						<input class="form-control" name="newSeriesTitle" v-model="newSeriesTitle" required>
@@ -653,6 +658,7 @@
 		data() {
 			return {
 				loading: false,
+                alertType: '', // bootstrap class
 				currentMenu: 'HomeMainScreen',
 				charactersList: [],
 				selectedCharacter: '',
@@ -696,6 +702,7 @@
 				this.subMenuClicked = '';
 				this.subMenu2Clicked = '';
 			},
+            // populates the characters list after a server call
 			fetchCharacters() {
 				ajaxurl_fetchCharacters = "{{ url_for('api_characters_list') }}"
 			
@@ -710,6 +717,7 @@
 					}
 				});
 			},
+            // populates the series list after a server call
 			fetchSeries() {
 				ajaxurl_fetchCharacters = "{{ url_for('api_series_list') }}"
 			
@@ -724,12 +732,14 @@
 					}
 				});
 			},
+            // goes back to home screen
 			goToHomeMain() {
 				this.currentMenu = 'HomeMainScreen';
 				this.selectedCharacter = '';
 				this.subMenuClicked = '';
 				this.subMenu2Clicked = '';
 			},
+            // goes to characters screen
 			goToCharactersList() {
 				this.currentMenu = 'CharactersMainScreen';
 				this.fetchCharacters();
@@ -833,6 +843,8 @@
 				this.subMenuClicked = 'NewSeriesEntry';
 			},
 			addNewSeries() {
+                this.loading = true;
+                
 				ajaxurl = "{{ url_for('api_series_add') }}";
 				postData = { "series_name": this.newSeriesTitle, "series_desc": this.newSeriesDesc };
 		    
@@ -844,12 +856,16 @@
 					dataType: 'json',
 					context: this,
 					success: function(res) {
+                        this.loading = false;
 						this.fetchSeries();
 						this.newSeriesTitle = '';
 						this.newSeriesDesc = '';
 						this.subMenuClicked = '';
 						
-					}
+					},
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        this.loading = false;
+                    }
 				});
 			},
 			viewSelectedCharacter(character) {
@@ -891,9 +907,6 @@
 			},
 			addCharacterConnection() {
 				this.subMenu2Clicked = 'AddCharacterConnection';
-				
-				this.relation_object = '';
-				this.relation = '';
 			},
 			saveNewConnection() {
 				relation_subject = this.fullSelectedCharacter.character.id;
@@ -916,6 +929,8 @@
 					dataType: 'json',
 					context: this,
 					success: function(res) {
+                        this.relation_object = '';
+                        this.relation = '';
 						this.subMenu2Clicked = '';
 					}
 				});
@@ -1058,6 +1073,7 @@
 						});
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
+                        // this handles bug #4 - check Github repo issues
 						this.loading = false;
 						console.error(textStatus, errorThrown);
 						this.story_title = "";

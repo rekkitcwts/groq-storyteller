@@ -328,6 +328,10 @@ Dummy pages.
 '''
 @app.route('/tests/plothole')
 def test_plothole():
+    # NOTE FROM THE DEVELOPER
+    # Do not run this test if the Groq API key used is the free tier.
+    # This will result in a rate limit error.
+    
     # Get all stories in the series with id=1
     max_diary = StoryDB.query.filter_by(series_id=1).all()
 
@@ -566,7 +570,8 @@ def story_humanizer_nonjson(story: str, custom_characters: Optional[List[Charact
                     "role": "user",
                     "content": f"Rewrite the following story: {story}. "
                         f"{', and use the following custom characters when they are mentioned by name within the story: ' + json.dumps(character_data) if custom_characters else ''}"
-                        f"{', and take note of the relationships between the characters : ' + json.dumps(optional_params) if optional_params else ''}"
+                        f"{', and incorporate the relationships between the mentioned characters when writing the story : ' + json.dumps(optional_params) if optional_params else ''}"
+                        f"{', Do not append the custom characters and relationships at the end of the story as these are only to be used while rewriting the story.' if custom_characters or optional_params else '' }"
                 }
             ],
             temperature=0.8,
@@ -583,7 +588,7 @@ def story_humanizer_nonjson(story: str, custom_characters: Optional[List[Charact
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a title generator. Generate a catchy and relevant title for the following story. Please provide only one title option."
+                    "content": "You are a title generator. Generate a catchy and relevant title for the following story. Please provide only one title option. Do not make the title too long."
                 },
                 {
                     "role": "user",
