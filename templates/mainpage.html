@@ -695,6 +695,7 @@
 				this.charactersList = [];
 				this.seriesList = [];
 				this.storiesList = [];
+                this.extractedCharacters = [];
 			},
 			clearAllSelected() {
 				this.selectedCharacter = '';
@@ -702,6 +703,9 @@
 				this.subMenuClicked = '';
 				this.subMenu2Clicked = '';
 			},
+            clearAllUsedFields() {
+                this.imported_story = "";
+            },
             // populates the characters list after a server call
 			fetchCharacters() {
 				ajaxurl_fetchCharacters = "{{ url_for('api_characters_list') }}"
@@ -738,6 +742,8 @@
 				this.selectedCharacter = '';
 				this.subMenuClicked = '';
 				this.subMenu2Clicked = '';
+                this.clearAllLists();
+                this.clearAllUsedFields();
 			},
             // goes to characters screen
 			goToCharactersList() {
