@@ -47,6 +47,10 @@ Self explanatory.
 def hello():
 	return render_template('mainpage.html', title="Everglen AI Engine")
     
+@app.route('/new_ui')
+def new_ui():
+    return render_template('base_azimuth.html', title="Everglen AI Engine - Beta UI")
+    
 '''
 Helper function for post requests - post requests are now parsed as bytes 
 Takes bytes that go with something like foo=123def&bar=456abc
@@ -653,7 +657,7 @@ def summary_and_location_generator(story: str, custom_characters: Optional[List[
                 },
                 {
                     "role": "user",
-                    "content": f"Get the location of the following story: {story}."
+                    "content": f"Get the location of the following story: {story}. Only provide the location in the form city and/or state, for example, Everglen, NY, and do not add other details."
                 }
             ],
             temperature=0.8,
